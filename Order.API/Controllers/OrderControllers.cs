@@ -44,6 +44,7 @@ namespace Order.API.Controllers
                 await _context.Orders.AddAsync(order);
                 await _context.SaveChangesAsync();
 
+                var idempotentToken = Guid.NewGuid();
                 OrderCreatedEvent orderCreatedEvent = new()
                 {
                     BuyerId = order.BuyerId,
@@ -53,7 +54,8 @@ namespace Order.API.Controllers
                         Count = x.Count,
                         Price = x.Price,
                         ProductId = x.ProductId
-                    }).ToList()
+                    }).ToList(),
+                    IdempotentToken = idempotentToken
                 };
 
                 #region Outbox Pattern Olmadan
@@ -68,7 +70,8 @@ namespace Order.API.Controllers
                     ProcessedDate = null,
                     Payload = JsonSerializer.Serialize(orderCreatedEvent),
                     //Type = orderCreatedEvent.GetType().Name
-                    Type = nameof(OrderCreatedEvent)
+                    Type = nameof(OrderCreatedEvent),
+                    IdempotentToken = idempotentToken
                 };
 
                 await _context.OrderOutboxes.AddAsync(orderOutbox);

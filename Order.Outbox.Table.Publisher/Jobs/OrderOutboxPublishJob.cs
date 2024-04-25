@@ -34,7 +34,7 @@ namespace Order.Outbox.Table.Publisher.Jobs
                         if (orderCreatedEvent != null)
                         {
                             await _publishEndpoint.Publish(orderCreatedEvent);
-                            OrderOutboxSingeltonDatabase.ExecuteAsync($"Update OrderOutboxes Set ProcessedDate = GetDate() Where Id ='{orderOutbox.Id}'");
+                            OrderOutboxSingeltonDatabase.ExecuteAsync($"Update OrderOutboxes Set ProcessedDate = GetDate() Where IdempotentToken ='{orderOutbox.IdempotentToken}'");
                         }
                     }
                 }

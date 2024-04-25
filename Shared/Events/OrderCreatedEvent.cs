@@ -13,6 +13,6 @@ namespace Shared.Events
         public int BuyerId { get; set; }
         public decimal TotalPrice { get; set; }
         public List<OrderItem> OrderItems { get; set; }
-        //public Guid IdempotentToken { get; set; }
+        public Guid IdempotentToken { get; set; }
     }
 }

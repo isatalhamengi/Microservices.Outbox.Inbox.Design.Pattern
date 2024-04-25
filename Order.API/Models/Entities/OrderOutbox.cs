@@ -4,7 +4,8 @@ namespace Order.API.Models.Entities
 {
     public class OrderOutbox
     {
-        public int Id { get; set; } // Geçici Olarak eklendi
+        [Key]
+        public Guid IdempotentToken { get; set; } // Geçici Olarak eklendi
         public DateTime OccuredOn { get; set; }
         public DateTime? ProcessedDate { get; set; }
         public string Type { get; set; }
